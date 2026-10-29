@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>لوحة تحكم المنيو</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0d0b;--card:#1a1814;--card2:#14120e;--tx:#f3ead6;--mu:#a89c82;--ac:#d4a537;--gr:#e6bd5a;--bd:#332e22;--dg:#d9534f;--ok:#4caf6a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Arial,sans-serif;max-width:720px;margin-inline:auto;padding:0 12px 80px;font-size:15px}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:rgba(14,13,11,.97);padding:10px 0 8px;border-bottom:1px solid var(--bd)}
+.top h1{margin:0 0 8px;font-size:18px;color:var(--gr);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.top h1 small{font-size:12px;color:var(--mu);font-weight:400}
+.save{background:linear-gradient(135deg,#f0cd6e,var(--ac));color:#14110a;border:0;border-radius:20px;padding:7px 16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.save:active{transform:scale(.95)}
+.tabs{display:flex;gap:6px}.tabs button{flex:1;background:transparent;border:1px solid var(--bd);border-radius:20px;padding:6px;color:var(--mu);cursor:pointer;font-weight:700}
+.tabs button.on{background:var(--ac);color:#14110a;border-color:var(--ac)}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin:14px 0}
+.box h3{margin:0 0 6px;color:var(--gr)}.box p{margin:4px 0 10px;color:var(--mu);font-size:13px;line-height:1.7}
+.msg{color:var(--mu);font-size:13px;margin-top:8px}.msg.err{color:var(--dg)}
+.cat{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:10px;margin:14px 0}
+.ch{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.cn{flex:1;min-width:0;background:var(--card2);border:1px solid var(--ac);border-radius:10px;padding:7px 10px;font-weight:700;color:var(--gr);font-size:16px}
+.ib{background:var(--card2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;cursor:pointer;color:var(--tx);flex:none}
+.ib.dg{color:var(--dg)}.ib:disabled{opacity:.3}
+.it{border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;background:var(--card2);overflow:hidden}
+.sum{display:flex;align-items:center;gap:10px;padding:8px;cursor:pointer}
+.th{width:46px;height:46px;border-radius:10px;overflow:hidden;flex:none;background:#2a2417;display:flex;align-items:center;justify-content:center;font-size:20px}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.sum b{flex:1;min-width:0;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sum em{font-style:normal;color:var(--gr);font-weight:700;white-space:nowrap}.sum i{color:var(--mu);font-style:normal}
+.ed{display:none;padding:10px;border-top:1px solid var(--bd)}.it.open .ed{display:block}.it.open .sum i{transform:rotate(180deg);display:inline-block}
+label.f{display:block;font-size:12.5px;color:var(--mu);margin:8px 0 3px}
+.in{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 10px}
+.in:focus,.cn:focus{outline:none;border-color:var(--ac)}
+textarea.in{min-height:64px;resize:vertical}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--ac);color:var(--gr);border-radius:10px;padding:7px 12px;cursor:pointer;font-weight:700;font-size:13.5px}
+.btn.dg{border-color:var(--dg);color:var(--dg)}.btn.full{width:100%;justify-content:center;padding:10px}
+.pv{width:78px;height:78px;border-radius:12px;overflow:hidden;background:#2a2417;flex:none}.pv img{width:100%;height:100%;object-fit:cover;display:block}
+input[type=color]{width:42px;height:36px;padding:2px;border-radius:8px;background:var(--bg);border:1px solid var(--bd)}
+.sl{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:8px;margin:10px 0}
+.sl .pv{width:72px;height:72px}.sl .col{flex:1;min-width:0}
+.hint{background:rgba(212,165,55,.08);border:1px dashed var(--ac);border-radius:12px;padding:10px 12px;color:var(--mu);font-size:13px;line-height:1.8;margin:12px 0}
+.hint b{color:var(--gr)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ok);color:#06210f;padding:9px 20px;border-radius:20px;font-weight:700;opacity:0;transition:.3s;z-index:50;pointer-events:none}.toast.on{opacity:1;transform:translateX(-50%)}
+.hide{display:none!important}
+</style></head><body>
+
+<div id="ld" class="box">
+<h3>🔧 لوحة تحكم المنيو</h3>
+<p>افتح ملف <b>index.html</b> بتاع الصفحة عشان تبدأ التعديل. لو الملف ده مرفوع جنب لوحة التحكم هتتحمّل لوحدها.</p>
+<label class="btn full" style="margin-top:6px">📂 اختار ملف index.html<input type="file" id="pick" accept=".html,text/html" hidden></label>
+<div id="lm" class="msg">بحاول أحمّل الصفحة من الموقع…</div>
+</div>
+
+<div id="ap" class="hide">
+<div class="top"><h1><span>لوحة التحكم <small id="st"></small></span><button class="save" id="sv">💾 تحميل index.html</button></h1>
+<div class="tabs"><button data-t="m" class="on">الأصناف</button><button data-t="s">السلايدر</button></div></div>
+<div class="hint">بعد ما تخلّص تعديل دوس <b>💾 تحميل index.html</b> وارفع الملف الجديد مكان القديم على الاستضافة. التعديلات مش بتظهر للزباين غير بعد الرفع.</div>
+<div id="v"></div>
+</div>
+<div class="toast" id="ts"></div>
+
+<script>
+var I,S,M,P,text,seg,tab='m',openK=null,dirty=false,icons=['mug','tea','ice','shake','mint','juice'],iconNames={mug:'كوب',tea:'كباية شاي',ice:'مثلجات',shake:'ميلك شيك',mint:'موهيتو',juice:'عصير'};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(m){var t=$('ts');t.textContent=m;t.className='toast on';clearTimeout(toast.t);toast.t=setTimeout(function(){t.className='toast'},1800)}
+function mark(){if(!dirty){dirty=true;$('st').textContent='• تعديلات لسه متحمّلتش'}}
+window.onbeforeunload=function(){if(dirty)return 'عندك تعديلات متحمّلتش'};
+
+function parse(t){
+  var a=t.indexOf('var I={'),b=t.indexOf(',$=function(i)',a),c=t.indexOf('var P={'),d=t.indexOf('var h=',c);
+  if(a<0||b<0||c<0||d<0)throw new Error('format');
+  var e=t.lastIndexOf(';',d);
+  var r=new Function(t.slice(a,b)+';'+t.slice(c,e)+';return {I:I,S:S,M:M,P:P}')();
+  I=r.I;S=r.S;M=r.M;P=r.P;text=t;seg={a:a,b:b,c:c,e:e};dirty=false;$('st').textContent='';
+  $('ld').className='hide';$('ap').className='';render()
+}
+function loadText(t){try{parse(t)}catch(x){$('lm').className='msg err';$('lm').textContent='الملف ده مش شكل صفحة المنيو الأصلية. اختار index.html الصح.'}}
+$('pick').onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){loadText(r.result)};r.readAsText(f)};
+if(/^https?:/.test(location.protocol)){fetch('index.html',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(loadText).catch(function(){$('lm').textContent='ملقتش index.html جنب اللوحة. اختاره من جهازك.'})}else $('lm').textContent='اختار ملف index.html من جهازك.';
+
+function js(o){return JSON.stringify(o).replace(/<\//g,'<\\/').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029')}
+function exportHtml(){
+  var used={},names={};
+  M.forEach(function(g){g[1].forEach(function(x){used[String(x[3])]=1;names[x[0]]=1})});
+  S.forEach(function(s){used[String(s[0])]=1});
+  var I2={},P2={};
+  Object.keys(I).forEach(function(k){if(used[k])I2[k]=I[k]});
+  Object.keys(P).forEach(function(k){if(names[k])P2[k]=P[k]});
+  return text.slice(0,seg.a)+'var I='+js(I2)+',S='+js(S)+',M='+js(M)+text.slice(seg.b,seg.c)+'var P='+js(P2)+text.slice(seg.e)
+}
+$('sv').onclick=function(){
+  var h=exportHtml(),bl=new Blob([h],{type:'text/html;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(bl);a.download='index.html';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);
+  dirty=false;$('st').textContent='';toast('اتحمّل index.html ✔')
+};
+document.querySelector('.tabs').onclick=function(e){var t=e.target.dataset.t;if(!t)return;tab=t;[].forEach.call(this.children,function(b){b.className=b.dataset.t==t?'on':''});render()};
+
+function img(file,size){return new Promise(function(ok,no){
+  var fr=new FileReader();fr.onerror=no;fr.onload=function(){var im=new Image();im.onerror=no;im.onload=function(){
+    var w=im.width,h=im.height,s=Math.min(w,h),c=document.createElement('canvas');c.width=c.height=size;
+    c.getContext('2d').drawImage(im,(w-s)/2,(h-s)/2,s,s,0,0,size,size);
+    var u=c.toDataURL('image/webp',.82);if(u.indexOf('data:image/webp')!=0)u=c.toDataURL('image/jpeg',.82);ok(u)};im.src=fr.result};
+  fr.readAsDataURL(file)})}
+function nk(){return 'u'+Date.now().toString(36)+Math.floor(Math.random()*1e3)}
+function photo(x){return I[x[3]]||P[x[0]]||''}
+function iconOf(x){var p=String(x[3]).split(':');return{t:icons.indexOf(p[0])>=0?p[0]:'juice',a:/^#[0-9a-f]{6}$/i.test(p[1])?p[1]:'#f5a623',b:/^#[0-9a-f]{6}$/i.test(p[2])?p[2]:'#ffd37a'}}
+function mv(arr,i,d){var j=i+d;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t}
+
+function render(){
+  var y=window.pageYOffset,h='';
+  if(tab=='m'){
+    M.forEach(function(g,ci){
+      h+='<section class="cat"><div class="ch"><input class="cn" data-a="cn" data-c="'+ci+'" value="'+esc(g[0])+'">'
+        +'<button class="ib" data-a="cup" data-c="'+ci+'"'+(ci?'':' disabled')+'>↑</button><button class="ib" data-a="cdn" data-c="'+ci+'"'+(ci<M.length-1?'':' disabled')+'>↓</button><button class="ib dg" data-a="cdel" data-c="'+ci+'">🗑</button></div>';
+      g[1].forEach(function(x,ii){
+        var k=ci+'-'+ii,p=photo(x),ic=iconOf(x);
+        h+='<div class="it'+(openK==k?' open':'')+'" data-c="'+ci+'" data-i="'+ii+'"><div class="sum" data-a="tog" data-k="'+k+'"><div class="th">'+(p?'<img src="'+p+'" alt="">':'<span style="color:'+ic.b+'">●</span>')+'</div><b>'+esc(x[0])+'</b><em>'+esc(x[2])+' ج</em><i>▾</i></div>'
+          +'<div class="ed"><label class="f">اسم الصنف</label><input class="in" data-a="in" data-f="0" value="'+esc(x[0])+'">'
+          +'<label class="f">الوصف</label><textarea class="in" data-a="in" data-f="1">'+esc(x[1])+'</textarea>'
+          +'<label class="f">السعر (جنيه)</label><input class="in" type="number" inputmode="decimal" data-a="in" data-f="2" value="'+esc(x[2])+'">'
+          +'<label class="f">الصورة</label><div class="row">'+(p?'<div class="pv"><img src="'+p+'" alt=""></div>':'')
+          +'<label class="btn">📷 '+(p?'تغيير الصورة':'رفع صورة')+'<input type="file" accept="image/*" hidden data-a="iupl"></label>'+(p?'<button class="btn dg" data-a="irm">إزالة الصورة</button>':'')+'</div>';
+        if(!p){h+='<div class="row"><span class="f" style="margin:0;color:var(--mu);font-size:12.5px">أيقونة بدل الصورة:</span><select class="in" style="width:auto" data-a="ico" data-f="t">'
+          +icons.map(function(t){return '<option value="'+t+'"'+(t==ic.t?' selected':'')+'>'+iconNames[t]+'</option>'}).join('')+'</select>'
+          +'<input type="color" data-a="ico" data-f="a" value="'+ic.a+'"><input type="color" data-a="ico" data-f="b" value="'+ic.b+'"></div>'}
+        h+='<div class="row"><button class="ib" data-a="iup">↑</button><button class="ib" data-a="idn">↓</button>'
+          +'<select class="in" style="width:auto;flex:1" data-a="imove"><option value="">نقل إلى قسم…</option>'+M.map(function(m,j){return j==ci?'':'<option value="'+j+'">'+esc(m[0])+'</option>'}).join('')+'</select>'
+          +'<button class="btn dg" data-a="idel">🗑 حذف</button></div></div></div>'
+      });
+      h+='<button class="btn full" data-a="iadd" data-c="'+ci+'">＋ إضافة صنف في «'+esc(g[0])+'»</button></section>'
+    });
+    h+='<button class="btn full" data-a="cadd">＋ قسم جديد</button>'
+  }else{
+    S.forEach(function(s,i){
+      h+='<div class="sl" data-i="'+i+'"><div class="pv"><img src="'+(I[s[0]]||'')+'" alt=""></div><div class="col"><input class="in" data-a="sin" value="'+esc(s[1])+'" placeholder="الكلمة اللي تظهر على الصورة"><div class="row">'
+        +'<button class="ib" data-a="sup"'+(i?'':' disabled')+'>↑</button><button class="ib" data-a="sdn"'+(i<S.length-1?'':' disabled')+'>↓</button><button class="ib dg" data-a="sdel">🗑</button></div></div></div>'
+    });
+    h+='<label class="btn full">＋ إضافة صورة للسلايدر<input type="file" accept="image/*" hidden data-a="sadd"></label><p class="msg">الصور بتتقص مربعة من النص تلقائي.</p>'
+  }
+  $('v').innerHTML=h;window.scrollTo(0,y)
+}
+
+var app=$('ap');
+app.addEventListener('click',function(e){
+  var n=e.target.closest('[data-a]');if(!n)return;var a=n.dataset.a;
+  if(a=='iupl'||a=='sadd'||a=='ico'||a=='in'||a=='cn'||a=='sin'||a=='imove')return;
+  var it=n.closest('.it'),ci=+(n.dataset.c!=null?n.dataset.c:it&&it.dataset.c),ii=it?+it.dataset.i:0,si=+((n.closest('.sl')||{dataset:{}}).dataset.i);
+  if(a=='tog'){openK=openK==n.dataset.k?null:n.dataset.k;render();return}
+  if(a=='cup'){mv(M,ci,-1)}else if(a=='cdn'){mv(M,ci,1)}
+  else if(a=='cdel'){if(!confirm('تحذف القسم «'+M[ci][0]+'» بكل أصنافه؟'))return;M.splice(ci,1)}
+  else if(a=='cadd'){var nm=prompt('اسم القسم الجديد؟');if(!nm)return;M.push([nm,[]])}
+  else if(a=='iadd'){M[ci][1].push(['صنف جديد','',0,'juice:#f5a623:#ffd37a']);openK=ci+'-'+(M[ci][1].length-1)}
+  else if(a=='iup'){mv(M[ci][1],ii,-1);openK=null}else if(a=='idn'){mv(M[ci][1],ii,1);openK=null}
+  else if(a=='idel'){if(!confirm('تحذف «'+M[ci][1][ii][0]+'»؟'))return;M[ci][1].splice(ii,1);openK=null}
+  else if(a=='irm'){var x=M[ci][1][ii];delete P[x[0]];x[3]='juice:#f5a623:#ffd37a'}
+  else if(a=='sup'){mv(S,si,-1)}else if(a=='sdn'){mv(S,si,1)}
+  else if(a=='sdel'){if(!confirm('تمسح الصورة دي من السلايدر؟'))return;S.splice(si,1)}
+  else return;
+  mark();render()
+});
+app.addEventListener('input',function(e){
+  var n=e.target,a=n.dataset.a;if(!a)return;var it=n.closest('.it');
+  if(a=='cn'){M[+n.dataset.c][0]=n.value;mark()}
+  else if(a=='sin'){S[+n.closest('.sl').dataset.i][1]=n.value;mark()}
+  else if(a=='in'){var x=M[+it.dataset.c][1][+it.dataset.i],f=+n.dataset.f,v=n.value;
+    if(f==0){if(v!==x[0]&&P[x[0]]!==undefined){P[v]=P[x[0]];delete P[x[0]]}x[0]=v;it.querySelector('.sum b').textContent=v}
+    else if(f==2){x[2]=v===''?0:+v;it.querySelector('.sum em').textContent=x[2]+' ج'}else x[1]=v;mark()}
+  else if(a=='ico'){var x=M[+it.dataset.c][1][+it.dataset.i],ic=iconOf(x);ic[n.dataset.f]=n.value;x[3]=ic.t+':'+ic.a+':'+ic.b;
+    var d=it.querySelector('.th span');if(d)d.style.color=ic.b;mark()}
+});
+app.addEventListener('change',function(e){
+  var n=e.target,a=n.dataset.a;
+  if(a=='imove'){if(n.value==='')return;var it=n.closest('.it'),c=+it.dataset.c,i=+it.dataset.i,x=M[c][1].splice(i,1)[0];M[+n.value][1].push(x);openK=null;mark();render();toast('اتنقل ✔');return}
+  if(a=='iupl'||a=='sadd'){var f=n.files[0];if(!f)return;var it=n.closest('.it');
+    img(f,a=='sadd'?800:480).then(function(u){var k=nk();I[k]=u;
+      if(a=='sadd'){var cp=prompt('الكلمة اللي تظهر على الصورة؟','')||'';S.push([k,cp])}
+      else{var x=M[+it.dataset.c][1][+it.dataset.i];x[3]=k}
+      mark();render()}).catch(function(){toast('الصورة دي مش شغالة، جرّب غيرها')})}
+});
+</script></body></html>
