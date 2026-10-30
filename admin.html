@@ -45,7 +45,7 @@ input[type=color]{width:42px;height:36px;padding:2px;border-radius:8px;backgroun
 .top h1{flex-wrap:wrap;gap:10px}.br{width:100%}.br .tt{display:flex;flex-direction:column;line-height:1.35;font-size:19px;min-width:0}.br .tt small{font-size:11.5px;min-height:15px}
 .br .out{margin-inline-start:auto;flex:none}.top .save{width:100%;padding:10px;font-size:14.5px;border-radius:14px}
 .tabs button{padding:9px 2px;font-size:12.5px}.qg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.qc{background:#fff;color:#111;border-radius:14px;padding:10px;text-align:center}.qc svg{width:100%!important;height:auto!important;display:block}.qh{font-weight:700;font-size:17px;margin-bottom:4px}.qs{font-size:11.5px;color:#555;margin-top:4px}
-@media print{.top,.stats,.box,.hint,.toast,#lg,.tools{display:none!important}body{background:#fff!important;max-width:none;padding:0}.qg{grid-template-columns:repeat(3,1fr);gap:8px}.qc{border:1px solid #000;break-inside:avoid}}.stats{gap:6px}.stats b{font-size:20px}.tools .btn{font-size:13px;padding:10px 6px;white-space:nowrap}
+@media print{.qc .btn{display:none!important}body.one .qc:not(.sel){display:none!important}body.one .qg{display:block}body.one .qc.sel{width:70%;margin:30px auto;border:2px solid #000;padding:24px}body.one .qh{font-size:34px}body.one .qs{font-size:18px}.top,.stats,.box,.hint,.toast,#lg,.tools{display:none!important}body{background:#fff!important;max-width:none;padding:0}.qg{grid-template-columns:repeat(3,1fr);gap:8px}.qc{border:1px solid #000;break-inside:avoid}}.stats{gap:6px}.stats b{font-size:20px}.tools .btn{font-size:13px;padding:10px 6px;white-space:nowrap}
 .rm{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--mu);font-size:13.5px;cursor:pointer}.rm input{width:18px;height:18px;accent-color:var(--ac)}
 body{background:radial-gradient(1200px 500px at 50% -150px,#2a2110,var(--bg) 70%) fixed}
 .br{display:flex;align-items:center;gap:10px}.lgo{width:42px;height:42px;border-radius:50%;object-fit:contain;background:#efe9c9;padding:2px;box-shadow:0 0 0 2px var(--ac)}
@@ -146,7 +146,7 @@ function wpv(){var a=$('wp');if(!a)return;a.textContent=W.p+'وافل نوتيل
 function defU(){return location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'index.html'}
 function drawQR(){var c=$('qrs');if(!c)return;if(typeof qrcode=='undefined'){c.innerHTML='<div class="hint" style="grid-column:1/-1">مكتبة الـ QR مش اتحمّلت. اتأكد من الإنترنت وافتح اللوحة تاني.</div>';return}
 var n=Math.max(1,Math.min(60,parseInt(W.t)||0)),b=W.u||defU(),h='';
-for(var i=1;i<=n;i++){var q=qrcode(0,'M');q.addData(b+(b.indexOf('?')<0?'?':'&')+'t='+i);q.make();h+='<div class="qc"><div class="qh">'+esc(W.l)+' '+i+'</div>'+q.createSvgTag(4,2)+'<div class="qs">امسح الكود واطلب</div></div>'}
+for(var i=1;i<=n;i++){var q=qrcode(0,'M');q.addData(b+(b.indexOf('?')<0?'?':'&')+'t='+i);q.make();h+='<div class="qc"><div class="qh">'+esc(W.l)+' '+i+'</div>'+q.createSvgTag(4,2)+'<div class="qs">امسح الكود واطلب</div><button class="btn" data-a="prq" data-n="'+i+'" style="margin-top:8px;padding:5px 12px;font-size:12.5px;background:#fff;color:#7a5a10;border-color:#7a5a10">🖨 طباعة دي بس</button></div>'}
 c.innerHTML=h}
 function hs(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return (h>>>0).toString(36)}
 function norm(){M.forEach(function(g){g[1].forEach(function(x){if(!I[x[3]]&&P[x[0]]){var k='p'+hs(x[0]);I[k]=P[x[0]];x[3]=k}})});P={}}
@@ -238,7 +238,9 @@ app.addEventListener('click',function(e){
   if(a=='iupl'||a=='sadd'||a=='ico'||a=='in'||a=='cn'||a=='sin'||a=='imove')return;
   var it=n.closest('.it'),ci=+(n.dataset.c!=null?n.dataset.c:it&&it.dataset.c),ii=it?+it.dataset.i:0,si=+((n.closest('.sl')||{dataset:{}}).dataset.i);
   if(a=='tog'){openK=openK==n.dataset.k?null:n.dataset.k;render();return}
-  if(a=='pr'){window.print();return}
+  if(a=='pr'){document.body.classList.remove('one');window.print();return}
+  if(a=='prq'){var cd=n.closest('.qc');[].forEach.call(document.querySelectorAll('.qc.sel'),function(x){x.classList.remove('sel')});cd.classList.add('sel');document.body.classList.add('one');
+    var fin=function(){document.body.classList.remove('one');cd.classList.remove('sel')};window.onafterprint=fin;window.print();return}
   if(a=='ccol'){colp[ci]=!colp[ci];render();return}
   if(a=='bulk'){var pc=parseFloat(prompt('نسبة التغيير في كل الأسعار؟ (مثال: 10 للزيادة، -5 للخصم)'));if(!pc||isNaN(pc))return;if(!confirm('تغيير كل الأسعار بنسبة '+pc+'% ؟'))return;M.forEach(function(g){g[1].forEach(function(x){x[2]=Math.round((+x[2]||0)*(1+pc/100))})});toast('اتغيّرت الأسعار ✔')}
   else if(a=='idup'){var o=M[ci][1][ii];M[ci][1].splice(ii+1,0,[o[0]+' (نسخة)',o[1],o[2],o[3]]);openK=ci+'-'+(ii+1)}
