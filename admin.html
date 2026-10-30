@@ -42,7 +42,20 @@ input[type=color]{width:42px;height:36px;padding:2px;border-radius:8px;backgroun
 .hint b{color:var(--gr)}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ok);color:#06210f;padding:9px 20px;border-radius:20px;font-weight:700;opacity:0;transition:.3s;z-index:50;pointer-events:none}.toast.on{opacity:1;transform:translateX(-50%)}
 .hide{display:none!important}
+#lg{max-width:360px;margin:12vh auto 0}#lg .in{margin-bottom:4px}#lg .btn{margin-top:12px}
+.out{background:transparent;border:1px solid var(--bd);color:var(--mu);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:12px}
 </style></head><body>
+
+<div id="lg" class="box">
+<h3>🔐 تسجيل الدخول</h3>
+<p>ادخل بيانات الأدمن عشان تفتح لوحة التحكم.</p>
+<label class="f">اسم المستخدم</label><input class="in" id="lu" autocomplete="username" autocapitalize="off">
+<label class="f">كلمة السر</label><input class="in" id="lp" type="password" autocomplete="current-password">
+<button class="btn full" id="lb">دخول</button>
+<div id="le" class="msg err"></div>
+</div>
+
+<div id="gate" class="hide">
 
 <div id="ld" class="box">
 <h3>🔧 لوحة تحكم المنيو</h3>
@@ -52,13 +65,28 @@ input[type=color]{width:42px;height:36px;padding:2px;border-radius:8px;backgroun
 </div>
 
 <div id="ap" class="hide">
-<div class="top"><h1><span>لوحة التحكم <small id="st"></small></span><button class="save" id="sv">💾 تحميل index.html</button></h1>
+<div class="top"><h1><span>لوحة التحكم <small id="st"></small></span><span style="display:flex;gap:6px;align-items:center"><button class="out" id="lo">خروج</button><button class="save" id="sv">💾 تحميل index.html</button></span></h1>
 <div class="tabs"><button data-t="m" class="on">الأصناف</button><button data-t="s">السلايدر</button></div></div>
 <div class="hint">بعد ما تخلّص تعديل دوس <b>💾 تحميل index.html</b> وارفع الملف الجديد مكان القديم على الاستضافة. التعديلات مش بتظهر للزباين غير بعد الرفع.</div>
 <div id="v"></div>
 </div>
+</div>
 <div class="toast" id="ts"></div>
 
+<script>
+(function(){
+function H(s){var o=[];[11,977].forEach(function(seed){var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0;i<s.length;i++){var c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);o.push((4294967296*(2097151&h2)+(h1>>>0)).toString(36))});return o.join('')}
+var K='ov5ylnb88t4865ds11a8',G=document.getElementById('gate'),L=document.getElementById('lg');
+function open(){L.className='hide';G.className=''}
+try{if(sessionStorage.getItem('adm')===K)open()}catch(e){}
+function go(){var u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value;
+ if(H(u+'\n'+p)===K){try{sessionStorage.setItem('adm',K)}catch(e){}document.getElementById('le').textContent='';open()}
+ else{document.getElementById('le').textContent='اسم المستخدم أو كلمة السر غلط';document.getElementById('lp').value=''}}
+document.getElementById('lb').onclick=go;
+document.getElementById('lp').onkeydown=document.getElementById('lu').onkeydown=function(e){if(e.key=='Enter')go()};
+document.getElementById('lo').onclick=function(){try{sessionStorage.removeItem('adm')}catch(e){}location.reload()};
+})();
+</script>
 <script>
 var I,S,M,P,text,seg,tab='m',openK=null,dirty=false,icons=['mug','tea','ice','shake','mint','juice'],iconNames={mug:'كوب',tea:'كباية شاي',ice:'مثلجات',shake:'ميلك شيك',mint:'موهيتو',juice:'عصير'};
 function $(i){return document.getElementById(i)}
