@@ -116,7 +116,7 @@ document.getElementById('lo').onclick=function(){try{localStorage.removeItem(KS)
 var dbI={},W={n:'201006898024',p:'السلام عليكم، عايز أطلب: ',s:'Cafe Tables "7"'},I,S,M,P,text,seg,qs='',colp={},bt,tab='m',openK=null,dirty=false,icons=['mug','tea','ice','shake','mint','juice'],iconNames={mug:'كوب',tea:'كباية شاي',ice:'مثلجات',shake:'ميلك شيك',mint:'موهيتو',juice:'عصير'};
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function toast(m){var t=$('ts');t.textContent=m;t.className='toast on';clearTimeout(toast.t);toast.t=setTimeout(function(){t.className='toast'},1800)}
+function toast(m,ms){var t=$('ts');t.textContent=m;t.className='toast on';clearTimeout(toast.t);toast.t=setTimeout(function(){t.className='toast'},ms||1800)}
 function mark(){if(!dirty){dirty=true;$('st').textContent='• تعديلات لسه متحمّلتش'}}
 window.onbeforeunload=function(){if(dirty)return 'عندك تعديلات متحمّلتش'};
 
@@ -130,7 +130,7 @@ function parse(t){
 }
 function loadText(t){try{parse(t)}catch(x){$('lm').className='msg err';$('lm').textContent='الملف ده مش شكل صفحة المنيو الأصلية. اختار index.html الصح.'}}
 $('pick').onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){loadText(r.result)};r.readAsText(f)};
-function api(m,path,body,q){return tok().then(function(t){return fetch(FB.db+path+'.json?'+(q?q+'&':'')+'auth='+t,{method:m,body:body===undefined?undefined:JSON.stringify(body)})}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function api(m,path,body,q){return tok().then(function(t){return fetch(FB.db+path+'.json?'+(q?q+'&':'')+'auth='+t,{method:m,body:body===undefined?undefined:JSON.stringify(body)})}).then(function(r){if(!r.ok)return r.text().then(function(x){throw new Error(r.status+' '+x)});return r.json()})}
 function loadAll(){$('lm').className='msg';$('lm').textContent='بحمّل المنيو من الداتابيز…';
 api('GET','/menu/data').then(function(d){
  if(!d||!d.json){$('lm').textContent='الداتابيز لسه فاضية. اختار ملف index.html الحالي عشان يترفع أول مرة.';return}
@@ -159,7 +159,7 @@ $('sv').onclick=function(){var b=this;if(b.disabled)return;b.disabled=true;b.tex
  var ks=Object.keys(need);for(var n=0;n<ks.length;n++){var k=ks[n];if(I[k]&&!dbI[k]){await api('PUT','/img/'+encodeURIComponent(k),I[k]);dbI[k]=true}}
  var ts=Date.now();await api('PUT','/menu',{data:{json:JSON.stringify({M:M,S:S,W:W})},ts:ts});
  var ex=Object.keys(dbI);for(var m=0;m<ex.length;m++)if(!need[ex[m]]){await api('DELETE','/img/'+encodeURIComponent(ex[m]));delete dbI[ex[m]]}
- dirty=false;$('st').textContent='';toast('اتنشر على الموقع ✔')}catch(e){toast('فشل النشر، جرّب تاني')}
+ dirty=false;$('st').textContent='';toast('اتنشر على الموقع ✔')}catch(e){var s=String(e&&e.message||e);toast(/^40[13]/.test(s)?'فشل النشر: مفيش صلاحية. راجع قواعد الداتابيز وإيميل الدخول':/auth/.test(s)?'الجلسة خلصت. دوس خروج وادخل تاني':/fetch|Network/i.test(s)?'فشل النشر: مفيش اتصال بالإنترنت':'فشل النشر: '+s.slice(0,90),7000)}
  b.disabled=false;b.textContent='🚀 نشر على الموقع'})()};
 $('q').oninput=function(){qs=this.value.trim().toLowerCase();render()};
 document.querySelector('.tabs').onclick=function(e){var t=e.target.dataset.t;if(!t)return;tab=t;[].forEach.call(this.children,function(b){b.className=b.dataset.t==t?'on':''});render()};
