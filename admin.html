@@ -144,9 +144,13 @@ api('GET','/menu/data').then(function(d){
 function wn(n){n=String(n||'').replace(/\D/g,'');if(n.length==11&&n[0]=='0')n='2'+n;return n}
 function wpv(){var a=$('wp');if(!a)return;a.textContent=W.p+'وافل نوتيلا (60 جنيه)'+(W.s?'\n'+W.s:'');$('wq').textContent='+'+wn(W.n)}
 function defU(){return location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/,'')+'index.html'}
+function dlQR(i){var b=W.u||defU(),q=qrcode(0,'M');q.addData(b+(b.indexOf('?')<0?'?':'&')+'t='+i);q.make();var sv=q.createSvgTag(10,4);if(sv.indexOf('xmlns')<0)sv=sv.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+ var ld=document.fonts&&document.fonts.load?document.fonts.load('700 64px Cairo').catch(function(){}):Promise.resolve();
+ return ld.then(function(){return new Promise(function(ok){var im=new Image();im.onload=function(){var w=800,h=980,c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.textAlign='center';x.fillStyle='#111';x.font='700 64px Cairo,Tahoma,Arial,sans-serif';x.fillText(W.l+' '+i,w/2,110);x.imageSmoothingEnabled=false;x.drawImage(im,70,150,660,660);x.fillStyle='#555';x.font='34px Cairo,Tahoma,Arial,sans-serif';x.fillText('امسح الكود واطلب',w/2,900);
+  c.toBlob(function(bl){var a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='table-'+i+'.png';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();ok()},700)})};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(sv)})})}
 function drawQR(){var c=$('qrs');if(!c)return;if(typeof qrcode=='undefined'){c.innerHTML='<div class="hint" style="grid-column:1/-1">مكتبة الـ QR مش اتحمّلت. اتأكد من الإنترنت وافتح اللوحة تاني.</div>';return}
 var n=Math.max(1,Math.min(60,parseInt(W.t)||0)),b=W.u||defU(),h='';
-for(var i=1;i<=n;i++){var q=qrcode(0,'M');q.addData(b+(b.indexOf('?')<0?'?':'&')+'t='+i);q.make();h+='<div class="qc"><div class="qh">'+esc(W.l)+' '+i+'</div>'+q.createSvgTag(4,2)+'<div class="qs">امسح الكود واطلب</div><button class="btn" data-a="prq" data-n="'+i+'" style="margin-top:8px;padding:5px 12px;font-size:12.5px;background:#fff;color:#7a5a10;border-color:#7a5a10">🖨 طباعة دي بس</button></div>'}
+for(var i=1;i<=n;i++){var q=qrcode(0,'M');q.addData(b+(b.indexOf('?')<0?'?':'&')+'t='+i);q.make();h+='<div class="qc"><div class="qh">'+esc(W.l)+' '+i+'</div>'+q.createSvgTag(4,2)+'<div class="qs">امسح الكود واطلب</div><button class="btn" data-a="prq" data-n="'+i+'" style="margin-top:8px;padding:5px 12px;font-size:12.5px;background:#fff;color:#7a5a10;border-color:#7a5a10">🖨 طباعة دي بس</button><button class="btn" data-a="dlq" data-n="'+i+'" style="margin-top:6px;padding:5px 12px;font-size:12.5px;background:#fff;color:#7a5a10;border-color:#7a5a10">⬇ تحميل صورة</button></div>'}
 c.innerHTML=h}
 function hs(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return (h>>>0).toString(36)}
 function norm(){M.forEach(function(g){g[1].forEach(function(x){if(!I[x[3]]&&P[x[0]]){var k='p'+hs(x[0]);I[k]=P[x[0]];x[3]=k}})});P={}}
@@ -219,7 +223,7 @@ function render(){
       +'<label class="f">عدد الترابيز</label><input class="in" type="number" inputmode="numeric" min="1" max="60" data-a="w" data-f="t" value="'+esc(W.t)+'">'
       +'<label class="f">الاسم في الرسالة</label><input class="in" data-a="w" data-f="l" value="'+esc(W.l)+'">'
       +'<label class="f">رابط صفحة المنيو (اتحدد تلقائي، عدّله لو مختلف)</label><input class="in" dir="ltr" data-a="w" data-f="u" value="'+esc(W.u||defU())+'">'
-      +'<button class="btn full" style="margin-top:12px" data-a="pr">🖨 طباعة كل الأكواد</button></div><div class="qg" id="qrs"></div>';
+      +'<div class="tools" style="margin-top:12px"><button class="btn" data-a="pr">🖨 طباعة الكل</button><button class="btn" data-a="dla">⬇ تحميل كل الصور</button></div></div><div class="qg" id="qrs"></div>';
   }else{
     h+='<div class="bn">'+(S.length?S.map(function(s,i){return '<div class="s'+(i?'':' on')+'"><img src="'+(I[s[0]]||'')+'" alt="">'+(s[1]?'<span>'+esc(s[1])+'</span>':'')+'</div>'}).join('')+'<div class="dots">'+S.map(function(_,i){return '<i'+(i?'':' class="on"')+'></i>'}).join('')+'</div>':'<div class="em">مفيش صور في البانر</div>')+'</div><div class="hint">دي معاينة حيّة للبانر المتحرك زي ما هيظهر للزباين. رتّب الصور بالأسهم واكتب الكلمة اللي تظهر عليها.</div>';
     S.forEach(function(s,i){
@@ -239,6 +243,8 @@ app.addEventListener('click',function(e){
   var it=n.closest('.it'),ci=+(n.dataset.c!=null?n.dataset.c:it&&it.dataset.c),ii=it?+it.dataset.i:0,si=+((n.closest('.sl')||{dataset:{}}).dataset.i);
   if(a=='tog'){openK=openK==n.dataset.k?null:n.dataset.k;render();return}
   if(a=='pr'){document.body.classList.remove('one');window.print();return}
+  if(a=='dlq'){if(typeof qrcode=='undefined')return;n.disabled=true;dlQR(+n.dataset.n).then(function(){n.disabled=false;toast('اتحمّلت الصورة ✔')});return}
+  if(a=='dla'){if(typeof qrcode=='undefined')return;n.disabled=true;var cnt=Math.max(1,Math.min(60,parseInt(W.t)||0)),k=1;(function nx(){if(k>cnt){n.disabled=false;toast('اتحمّلت كل الصور ✔');return}dlQR(k++).then(nx)})();return}
   if(a=='prq'){var cd=n.closest('.qc');[].forEach.call(document.querySelectorAll('.qc.sel'),function(x){x.classList.remove('sel')});cd.classList.add('sel');document.body.classList.add('one');
     var fin=function(){document.body.classList.remove('one');cd.classList.remove('sel')};window.onafterprint=fin;window.print();return}
   if(a=='ccol'){colp[ci]=!colp[ci];render();return}
