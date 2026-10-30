@@ -42,6 +42,7 @@ input[type=color]{width:42px;height:36px;padding:2px;border-radius:8px;backgroun
 .hint b{color:var(--gr)}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--ok);color:#06210f;padding:9px 20px;border-radius:20px;font-weight:700;opacity:0;transition:.3s;z-index:50;pointer-events:none}.toast.on{opacity:1;transform:translateX(-50%)}
 .hide{display:none!important}
+.cr{text-align:center;color:var(--mu);font-size:13px;margin:26px 0 12px;opacity:.85}.cr::before{content:'';display:block;width:40px;height:2px;margin:0 auto 10px;background:var(--ac);border-radius:2px;opacity:.6}
 .top h1{flex-wrap:wrap;gap:10px}.br{width:100%}.br .tt{display:flex;flex-direction:column;line-height:1.35;font-size:19px;min-width:0}.br .tt small{font-size:11.5px;min-height:15px}
 .br .out{margin-inline-start:auto;flex:none}.top .save{width:100%;padding:10px;font-size:14.5px;border-radius:14px}
 .tabs button{padding:9px 2px;font-size:12.5px}.qg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.qc{background:#fff;color:#111;border-radius:14px;padding:10px;text-align:center}.qc svg{width:100%!important;height:auto!important;display:block}.qh{font-weight:700;font-size:17px;margin-bottom:4px}.qs{font-size:11.5px;color:#555;margin-top:4px}
@@ -73,6 +74,7 @@ body{background:radial-gradient(1200px 500px at 50% -150px,#2a2110,var(--bg) 70%
 <label class="rm"><input type="checkbox" id="lr" checked> تذكرني (من غير ما أكتب البيانات كل مرة)</label>
 <button class="btn full" id="lb" type="submit">دخول</button></form>
 <div id="le" class="msg err"></div>
+<div class="cr">تصميم وتطوير احمد رحال</div>
 </div>
 
 <div id="gate" class="hide">
@@ -90,6 +92,7 @@ body{background:radial-gradient(1200px 500px at 50% -150px,#2a2110,var(--bg) 70%
 <div class="stats" id="stats"></div>
 <div class="hint">كل ما تخلّص تعديل دوس <b>🚀 نشر على الموقع</b> والتعديلات بتظهر للزباين في ثواني من غير رفع ملفات.</div>
 <div id="v"></div>
+<div class="cr">تصميم وتطوير احمد رحال</div>
 </div>
 </div>
 <div class="toast" id="ts"></div>
@@ -115,7 +118,7 @@ document.getElementById('lo').onclick=function(){try{localStorage.removeItem(KS)
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
-var dbI={},W={t:15,l:'ترابيزة',u:'',n:'201006898024',p:'السلام عليكم، عايز أطلب: ',s:'Cafe Tables "7"'},I,S,M,P,text,seg,qs='',colp={},bt,tab='m',openK=null,dirty=false,icons=['mug','tea','ice','shake','mint','juice'],iconNames={mug:'كوب',tea:'كباية شاي',ice:'مثلجات',shake:'ميلك شيك',mint:'موهيتو',juice:'عصير'};
+var dbI={},W={t:15,l:'ترابيزة',u:'',n:'201006898024',p:'السلام عليكم، عايز أطلب: ',s:'Cafe Tables "7"'},I,S,M,P,text,seg,qs='',opn={},bt,tab='m',openK=null,dirty=false,icons=['mug','tea','ice','shake','mint','juice'],iconNames={mug:'كوب',tea:'كباية شاي',ice:'مثلجات',shake:'ميلك شيك',mint:'موهيتو',juice:'عصير'};
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function toast(m,ms){var t=$('ts');t.textContent=m;t.className='toast on';clearTimeout(toast.t);toast.t=setTimeout(function(){t.className='toast'},ms||1800)}
@@ -136,7 +139,7 @@ function api(m,path,body,q){return tok().then(function(t){return fetch(FB.db+pat
 function loadAll(){$('lm').className='msg';$('lm').textContent='بحمّل المنيو من الداتابيز…';
 api('GET','/menu/data').then(function(d){
  if(!d||!d.json){$('lm').textContent='الداتابيز لسه فاضية. اختار ملف index.html الحالي عشان يترفع أول مرة.';return}
- var o=JSON.parse(d.json),need={};M=o.M||[];S=o.S||[];W=Object.assign({},W,o.W||{});P={};I={};
+ var o=JSON.parse(d.json),need={};M=o.M||[];S=o.S||[];W=Object.assign({},W,o.W||{});P={};I={};opn={};
  M.forEach(function(g){g[1].forEach(function(x){need[x[3]]=1})});S.forEach(function(s){need[s[0]]=1});
  return api('GET','/img',undefined,'shallow=true').then(function(sh){dbI=sh||{};
   return Promise.all(Object.keys(need).filter(function(k){return dbI[k]}).map(function(k){return api('GET','/img/'+encodeURIComponent(k)).then(function(v){I[k]=v})}))}).then(function(){text=null;dirty=false;$('st').textContent='';$('ld').className='hide';$('ap').className='';render()})
@@ -192,9 +195,9 @@ function render(){
   if(tab=='m'){
     h+='<div class="tools"><button class="btn" data-a="bulk">💲 تعديل الأسعار بنسبة</button><button class="btn" data-a="cadd">＋ قسم جديد</button></div>';
     M.forEach(function(g,ci){
-      h+='<section class="cat"><div class="ch"><button class="cc" data-a="ccol" data-c="'+ci+'">'+(colp[ci]?'◂':'▾')+' '+g[1].length+'</button><input class="cn" data-a="cn" data-c="'+ci+'" value="'+esc(g[0])+'">'
+      h+='<section class="cat"><div class="ch"><button class="cc" data-a="ccol" data-c="'+ci+'">'+((qs||opn[ci])?'▾ إغلاق':'◂ '+g[1].length+' صنف')+'</button><input class="cn" data-a="cn" data-c="'+ci+'" value="'+esc(g[0])+'">'
         +'<button class="ib" data-a="cup" data-c="'+ci+'"'+(ci?'':' disabled')+'>↑</button><button class="ib" data-a="cdn" data-c="'+ci+'"'+(ci<M.length-1?'':' disabled')+'>↓</button><button class="ib dg" data-a="cdel" data-c="'+ci+'">🗑</button></div>';
-      if(!colp[ci])g[1].forEach(function(x,ii){
+      if(qs||opn[ci])g[1].forEach(function(x,ii){
         if(qs&&(x[0]+' '+x[1]).toLowerCase().indexOf(qs)<0)return;
         var k=ci+'-'+ii,p=photo(x),ic=iconOf(x);
         h+='<div class="it'+(openK==k?' open':'')+'" data-c="'+ci+'" data-i="'+ii+'"><div class="sum" data-a="tog" data-k="'+k+'"><div class="th">'+(p?'<img src="'+p+'" alt="">':'<span style="color:'+ic.b+'">●</span>')+'</div><b>'+esc(x[0])+'</b><em>'+esc(x[2])+' ج</em><i>▾</i></div>'
@@ -210,7 +213,7 @@ function render(){
           +'<select class="in" style="width:auto;flex:1" data-a="imove"><option value="">نقل إلى قسم…</option>'+M.map(function(m,j){return j==ci?'':'<option value="'+j+'">'+esc(m[0])+'</option>'}).join('')+'</select>'
           +'<button class="btn" data-a="idup">⧉ نسخ</button><button class="btn dg" data-a="idel">🗑 حذف</button></div></div></div>'
       });
-      if(!colp[ci])h+='<button class="btn full" data-a="iadd" data-c="'+ci+'">＋ إضافة صنف في «'+esc(g[0])+'»</button>';h+='</section>'
+      if(qs||opn[ci])h+='<button class="btn full" data-a="iadd" data-c="'+ci+'">＋ إضافة صنف في «'+esc(g[0])+'»</button>';h+='</section>'
     });
   }else if(tab=='w'){
     h+='<div class="box"><h3>📲 إعدادات الطلب بالواتساب</h3><p>الرقم والرسالة اللي بتتفتح للزبون لما يدوس «اطلب».</p>'
@@ -247,12 +250,12 @@ app.addEventListener('click',function(e){
   if(a=='dla'){if(typeof qrcode=='undefined')return;n.disabled=true;var cnt=Math.max(1,Math.min(60,parseInt(W.t)||0)),k=1;(function nx(){if(k>cnt){n.disabled=false;toast('اتحمّلت كل الصور ✔');return}dlQR(k++).then(nx)})();return}
   if(a=='prq'){var cd=n.closest('.qc');[].forEach.call(document.querySelectorAll('.qc.sel'),function(x){x.classList.remove('sel')});cd.classList.add('sel');document.body.classList.add('one');
     var fin=function(){document.body.classList.remove('one');cd.classList.remove('sel')};window.onafterprint=fin;window.print();return}
-  if(a=='ccol'){colp[ci]=!colp[ci];render();return}
+  if(a=='ccol'){opn[ci]=!opn[ci];render();return}
   if(a=='bulk'){var pc=parseFloat(prompt('نسبة التغيير في كل الأسعار؟ (مثال: 10 للزيادة، -5 للخصم)'));if(!pc||isNaN(pc))return;if(!confirm('تغيير كل الأسعار بنسبة '+pc+'% ؟'))return;M.forEach(function(g){g[1].forEach(function(x){x[2]=Math.round((+x[2]||0)*(1+pc/100))})});toast('اتغيّرت الأسعار ✔')}
   else if(a=='idup'){var o=M[ci][1][ii];M[ci][1].splice(ii+1,0,[o[0]+' (نسخة)',o[1],o[2],o[3]]);openK=ci+'-'+(ii+1)}
-  else if(a=='cup'){mv(M,ci,-1)}else if(a=='cdn'){mv(M,ci,1)}
-  else if(a=='cdel'){if(!confirm('تحذف القسم «'+M[ci][0]+'» بكل أصنافه؟'))return;M.splice(ci,1)}
-  else if(a=='cadd'){var nm=prompt('اسم القسم الجديد؟');if(!nm)return;M.push([nm,[]])}
+  else if(a=='cup'){if(ci>0){var o1=opn[ci];opn[ci]=opn[ci-1];opn[ci-1]=o1}mv(M,ci,-1)}else if(a=='cdn'){if(ci<M.length-1){var o2=opn[ci];opn[ci]=opn[ci+1];opn[ci+1]=o2}mv(M,ci,1)}
+  else if(a=='cdel'){if(!confirm('تحذف القسم «'+M[ci][0]+'» بكل أصنافه؟'))return;M.splice(ci,1);opn={}}
+  else if(a=='cadd'){var nm=prompt('اسم القسم الجديد؟');if(!nm)return;M.push([nm,[]]);opn[M.length-1]=true}
   else if(a=='iadd'){M[ci][1].push(['صنف جديد','',0,'juice:#f5a623:#ffd37a']);openK=ci+'-'+(M[ci][1].length-1)}
   else if(a=='iup'){mv(M[ci][1],ii,-1);openK=null}else if(a=='idn'){mv(M[ci][1],ii,1);openK=null}
   else if(a=='idel'){if(!confirm('تحذف «'+M[ci][1][ii][0]+'»؟'))return;M[ci][1].splice(ii,1);openK=null}
